@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zudoku</title>
+  </head>
+  <body>
+    <div id="sudoku-field"></div>
+    <br />
+    <label
+      >Given: <input id="count-given" type="range" min="1" max="10" value="4"
+    /></label>
+    <br />
+    <button onclick="create()">Create</button>
+    <button onclick="solveStep()">Solve Step</button>
+    <button onclick="solve()">Solve</button>
+    <button onclick="reset()">Reset</button>
+    <br />
+    <script type="module" src="./script/index.ts"></script>
+    <link rel="stylesheet" href="./style/index.scss" />
+  </body>
+</html>
