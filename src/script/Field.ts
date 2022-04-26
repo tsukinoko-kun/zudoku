@@ -5,6 +5,9 @@ export class Field implements Iterable<Cell> {
   private readonly preset: Set<string>;
   private initialValues: Map<[number, number], number>;
 
+  private deadlockCount = 0;
+  private deadlockCountCopy = 0;
+
   constructor(startCount: number = 4) {
     this.field = new Map();
     this.preset = new Set();
@@ -22,9 +25,11 @@ export class Field implements Iterable<Cell> {
     return true;
   }
 
-  public get dead(): boolean {
+  public get deadLock(): boolean {
     for (const cell of this) {
       if (cell.length === 0) {
+        this.deadlockCount++;
+        this.deadlockCountCopy = this.deadlockCount;
         return true;
       }
     }
@@ -45,7 +50,7 @@ export class Field implements Iterable<Cell> {
     }
 
     if (nextCell) {
-      nextCell.set();
+      nextCell.set(undefined, this.deadlockCountCopy--);
       this.removeIllegalNumbers();
     } else {
       throw new Error("No next cell found");

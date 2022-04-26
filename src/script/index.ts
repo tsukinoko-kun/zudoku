@@ -2,6 +2,7 @@ import { Field } from "./Field";
 
 const fieldEl = document.getElementById("sudoku-field")!;
 const countGivenEl = document.getElementById("count-given") as HTMLInputElement;
+const stepDelayEl = document.getElementById("step-delay") as HTMLInputElement;
 
 const field = new Field(countGivenEl.valueAsNumber);
 (globalThis as any).field = field;
@@ -12,6 +13,10 @@ const render = () => {
   for (const cellData of field) {
     const cellEl = document.createElement("div");
     cellEl.classList.add("cell");
+
+    const score = 1 - cellData.length / 9;
+    cellEl.style.backgroundColor = `hsl(${(score * 120) | 0}, 100%, 50%)`;
+
     if (field.isPreset(cellData)) {
       cellEl.classList.add("preset");
     }
@@ -40,8 +45,8 @@ const create = () => {
 create();
 
 const solveStep = () => {
-  if (field.dead) {
-    console.log("Dead End");
+  if (field.deadLock) {
+    console.log("Dead Lock");
     field.reset();
   }
 
@@ -56,7 +61,7 @@ const solve = () => {
     } else {
       solveStep();
     }
-  }, 10);
+  }, stepDelayEl.valueAsNumber);
 };
 
 (globalThis as any).create = create;

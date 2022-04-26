@@ -13,9 +13,32 @@
   <body>
     <div id="sudoku-field"></div>
     <br />
-    <label
-      >Given: <input id="count-given" type="range" min="1" max="10" value="4"
-    /></label>
+    <label>
+      <input
+        id="count-given"
+        type="range"
+        min="1"
+        max="10"
+        value="4"
+        oninput="document.getElementById('count-given-display').innerText = this.value"
+      />
+      Given:
+      <span id="count-given-display">4</span>
+    </label>
+    <br />
+    <label>
+      <input
+        id="step-delay"
+        type="range"
+        min="10"
+        max="1000"
+        value="10"
+        step="10"
+        oninput="document.getElementById('step-delay-display').innerText = this.value"
+      />
+      Step delay:
+      <span id="step-delay-display">10</span>
+    </label>
     <br />
     <button onclick="create()">Create</button>
     <button onclick="solveStep()">Solve Step</button>

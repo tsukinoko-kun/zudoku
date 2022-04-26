@@ -14,10 +14,20 @@ export class Cell {
     }
   }
 
-  public set(value?: number): void {
+  public set(value?: number, index?: number): void {
     if (value !== undefined) {
       this.possibleNumbers.length = 1;
       this.possibleNumbers[0] = value;
+    } else if (index !== undefined) {
+      const randomEl =
+        this.possibleNumbers[Math.max(0, index % this.length)] ??
+        this.possibleNumbers[0];
+      if (randomEl !== undefined) {
+        this.possibleNumbers.length = 1;
+        this.possibleNumbers[0] = randomEl;
+      } else {
+        throw new Error(`Cell [${this.id}] has no possible numbers`);
+      }
     } else {
       const randomEl =
         this.possibleNumbers[Math.round(Math.random() * (this.length - 1))] ??
