@@ -46,7 +46,17 @@ export class Cell {
   }
 
   public get value(): number {
-    return this.possibleNumbers.values().next().value;
+    return this.possibleNumbers[0]!;
+  }
+
+  public get stringValue(): string {
+    return this.possibleNumbers.length === 1
+      ? this.possibleNumbers[0]!.toString()
+      : "";
+  }
+
+  public set value(value: number) {
+    this.set(value);
   }
 
   public remove(value: number): void {

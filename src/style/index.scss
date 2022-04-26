@@ -1,3 +1,5 @@
+@use "sass:math";
+
 :root,
 body {
   background-color: white;
@@ -9,8 +11,9 @@ body {
 }
 
 #sudoku-field {
-  width: 75vmin;
-  height: 75vmin;
+  $size: 75vmin;
+  width: $size;
+  height: $size;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(9, 1fr);
@@ -18,10 +21,20 @@ body {
   border: 1px solid whitesmoke;
 
   > .cell {
+    width: #{math.div($size, 9)};
+    height: #{math.div($size, 9)};
+    outline: none;
+    border: none;
     color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
     border-right: 1px solid whitesmoke;
 
@@ -46,12 +59,14 @@ body {
     }
 
     &.preset {
-      font-style: bold;
-      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+      font-style: 800;
+      font-weight: 800;
     }
 
     &:not(.preset) {
-      font-weight: 300;
+      font-weight: 200;
     }
 
     &.solved {

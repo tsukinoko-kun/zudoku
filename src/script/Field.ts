@@ -5,15 +5,15 @@ export class Field implements Iterable<Cell> {
   private readonly preset: Set<string>;
   private initialValues: Map<[number, number], number>;
 
-  private deadlockCount = 0;
-  private deadlockCountCopy = 0;
+  private deadLockCount = 0;
+  private deadLockCountCopy = 0;
 
-  constructor(startCount: number = 4) {
+  constructor() {
     this.field = new Map();
     this.preset = new Set();
     this.initialValues = new Map();
 
-    this.initialize(startCount);
+    this.initialize();
   }
 
   public get solved(): boolean {
@@ -28,12 +28,24 @@ export class Field implements Iterable<Cell> {
   public get deadLock(): boolean {
     for (const cell of this) {
       if (cell.length === 0) {
-        this.deadlockCount++;
-        this.deadlockCountCopy = this.deadlockCount;
+        this.deadLockCount++;
+        this.deadLockCountCopy = this.deadLockCount;
         return true;
       }
     }
     return false;
+  }
+
+  public get(x: number, y: number): Cell {
+    const id = Cell.id(x, y);
+
+    if (this.field.has(id)) {
+      return this.field.get(id)!;
+    } else {
+      const cellData = new Cell(x, y);
+      this.field.set(cellData.id, cellData);
+      return cellData;
+    }
   }
 
   public setNextCell() {
@@ -50,7 +62,7 @@ export class Field implements Iterable<Cell> {
     }
 
     if (nextCell) {
-      nextCell.set(undefined, this.deadlockCountCopy--);
+      nextCell.set(undefined, this.deadLockCountCopy--);
       this.removeIllegalNumbers();
     } else {
       throw new Error("No next cell found");
@@ -60,7 +72,7 @@ export class Field implements Iterable<Cell> {
   public removeIllegalNumbers() {
     for (let x = 0; x < 9; x++) {
       for (let y = 0; y < 9; y++) {
-        const cellData = this.field.get(Cell.id(x, y)!);
+        const cellData = this.field.get(Cell.id(x, y));
 
         if (!cellData) {
           throw new Error(`Cell [${Cell.id(x, y)}] not found`);
@@ -114,7 +126,14 @@ export class Field implements Iterable<Cell> {
     }
   }
 
-  public initialize(startCount: number = 4) {
+  private initialized = false;
+  public initialize() {
+    if (this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+
     this.field.clear();
     this.preset.clear();
     this.initialValues.clear();
@@ -125,19 +144,22 @@ export class Field implements Iterable<Cell> {
         this.field.set(cellData.id, cellData);
       }
     }
+  }
 
-    while (this.preset.size < startCount) {
-      const x = Math.floor(Math.random() * 9);
-      const y = Math.floor(Math.random() * 9);
-      const cellData = this.field.get(Cell.id(x, y));
-      if (!cellData) {
-        throw new Error(`Cell [${Cell.id(x, y)}] not found`);
-      }
-      cellData.set();
-      this.removeIllegalNumbers();
+  public setPreset(data: Map<[number, number], number>) {
+    this.field.clear();
+    this.preset.clear();
+    this.initialValues.clear();
+
+    for (const [id, value] of data) {
+      const cellData = this.get(...id);
+      cellData.set(value);
       this.preset.add(cellData.id);
-      this.initialValues.set([x, y], cellData.value);
+      this.initialValues.set([cellData.x, cellData.y], value);
     }
+
+    this.reset();
+    this.deadLockCount = this.deadLockCountCopy = 0;
   }
 
   public reset() {
