@@ -3,9 +3,9 @@
 Sudoku solver using wave function collapse
 
 ```
-npm install
+yarn
 ```
 
 ```
-npm run dev
+yarn dev
 ```
