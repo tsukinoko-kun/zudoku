@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Sudoku solver",
   "scripts": {
-    "dev": "parcel serve 'src/**/*.html'",
-    "clean": "rm -rf './.parcel-cache' && rm -rf './dist'",
-    "build": "parcel build 'src/index.html' --no-source-maps --no-cache"
+    "dev": "parcel serve \"src/**/*.html\"",
+    "clean": "rm -rf \"./.parcel-cache\" && rm -rf \"./dist\"",
+    "build": "parcel build \"src/index.html\" --no-source-maps --no-cache"
   },
   "repository": "https://github.com/Frank-Mayer/zudoku.git",
   "author": "Frank Mayer <frank.mayer1907@protonmail.com>",
